@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flats</title>
+    <style>
+        .flat-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .flat {
+            width: 25%;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flat-container">
+        {% for flat in flats %}
+        <div class="flat">
+            <h3>{{ flat[1] }}</h3>
+            <img src="{{ flat[2] }}" alt="Flat Image">
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

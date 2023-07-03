@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "test-task"
+version = "0.1.0"
+description = ""
+authors = ["FiVerka <you@example.com>"]
+readme = "README.md"
+packages = [{include = "test_task"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^2.3.2"
+waitress = "^2.1.2"
+scrapy = "^2.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  scrapy:
+    build: ./sreality_scraper
+    ports:
+      - "8050:5000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+  database:
+    image: postgres:14.2-alpine
+    ports:
+      - "5432"
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=sreality
+      - POSTGRES_HOST=database
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  flask:
+    build: ./app
+    restart: always
+    volumes:
+      - app:/usr/src/app/
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - mynetwork
+    command: ["python", "app.py"]
+
+volumes:
+  pgdata:
+  app:
+
+networks:
+  mynetwork:
+    driver: bridge
